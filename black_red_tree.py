@@ -91,10 +91,39 @@ def rbtree_insert(rootNode: RBNode, x: RBNode):
     rootNode.color = BLACK
     return rootNode
 
-def rbdelete_fixup(rootNode: RBNode, x: RBNode):
-    pass
+def rbdelete_fixup(rootNode: RBNode, nodeUpper: RBNode, lrFlag: int):
+    if rootNode is None:
+        return rootNode
+    if nodeUpper is None:
+        rootNode.color = BLACK
+        return rootNode
+    sonDeleted = getattr(nodeUpper, 'left' if lrFlag == -1 else 'right')
+    # Сын удаленного узла (СУ) Красный => перекрасим в черный
+    if sonDeleted is not None and sonDeleted.color == RED:
+        sonDeleted.color = BLACK
+        return rootNode
+    # Сын удаленного узла (СУ) Черный
+    else:
+        bro: RBNode = getattr(nodeUpper, 'right' if lrFlag == -1 else 'left')
+        # Если Брат черный и дети брата черные
+        if bro.color == BLACK and \
+                (bro.left is None or bro.left.color == BLACK) and \
+                (bro.right is None or bro.right.color == BLACK):
+            bro.color = RED
+            nodeUpper.color = BLACK
+            return rootNode
+        elif bro.color == BLACK:
+
+
+
+
+
+
+
+
 
 def rbtree_delete(rootNode: RBNode, z: RBNode) -> Node:
+    lrFlag = 0
     y = z if z.left is None or z.right is None else tree_successor(z)
     x = y.left if y.left is not None else y.right
     if x is not None:
@@ -102,14 +131,16 @@ def rbtree_delete(rootNode: RBNode, z: RBNode) -> Node:
     if y.parent is None:
         rootNode = x
     elif y == y.parent.left:
-        y.parent.left = x
+        y.parent.left, lrFlag = x, -1
     else:
-        y.parent.right = x
-    if y != z:
+        y.parent.right, lrFlag = x, 1
+    nodeFather = y.parent
+    if y != z: # Если мы переместили в вершину z вершину y
         z.key = y.key
     if y.color == BLACK:
-        rootNode = rbdelete_fixup(rootNode, x)
+        rootNode = rbdelete_fixup(rootNode, nodeFather, lrFlag)
     return rootNode
+
 
 
 
