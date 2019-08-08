@@ -45,7 +45,7 @@ def tree_insert(rootNode: Node, z: Node):
     y = None
     while x is not None:
         y = x
-        x = x.left if z.key < x.key else x.right
+        x = x.left if z.key <= x.key else x.right
     z.parent = y
     if y is None:
         return z

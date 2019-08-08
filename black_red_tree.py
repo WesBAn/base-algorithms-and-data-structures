@@ -8,6 +8,19 @@ class RBNode(Node):
         super().__init__(key, left, right, parent)
         self.color = color
 
+    def other_name(self, level=0, lrFlag=0):
+        if lrFlag == 0:
+            specSym = ''
+        elif lrFlag == -1:
+            specSym = '|l|'
+        else:
+            specSym = '|r|'
+        print('--' * level + specSym + str(self.key) + ('к' if self.color == RED else 'ч'))
+        if self.left:
+            self.left.other_name(level + 1, lrFlag=-1)
+        if self.right:
+            self.right.other_name(level + 1, lrFlag=1)
+
 
 def left_rotate(rootNode: Node, x: Node):
     if x.right is None:
@@ -104,23 +117,50 @@ def rbdelete_fixup(rootNode: RBNode, nodeUpper: RBNode, lrFlag: int):
         return rootNode
     # Сын удаленного узла (СУ) Черный
     else:
-        bro: RBNode = getattr(nodeUpper, 'right' if lrFlag == -1 else 'left')
-        # Если Брат черный и дети брата черные
+        bro = getattr(nodeUpper, 'left' if lrFlag == 1 else 'right')
+        # Дети брата черные и брат черный
         if bro.color == BLACK and \
-                (bro.left is None or bro.left.color == BLACK) and \
-                (bro.right is None or bro.right.color == BLACK):
-            bro.color = RED
-            nodeUpper.color = BLACK
-            return rootNode
-        elif bro.color == BLACK:
-
-
-
-
-
-
-
-
+                    (bro.left is None or bro.left.color == BLACK) and \
+                    (bro.right is None or bro.right.color == BLACK):
+                bro.color = RED
+                nodeUpper.color = BLACK
+        elif lrFlag == -1:
+            # Если Брат красный
+            if bro.color == RED:
+                bro.color = BLACK
+                nodeUpper.color = RED
+                rootNode = left_rotate(rootNode, nodeUpper)
+            else:
+                # Если брат черный правый ребенок =  черный левый = красный
+                if bro.color == BLACK and \
+                    (bro.left is not None and bro.left.color == RED) and \
+                    (bro.right is None or bro.right.color == BLACK):
+                    bro.color = RED
+                    bro.left = BLACK
+                    rootNode = right_rotate(rootNode, bro)
+                nodeUpper.right.right.color = BLACK
+                nodeUpper.right.color = nodeUpper.color
+                nodeUpper.color = BLACK
+                rootNode = left_rotate(rootNode, nodeUpper)
+        else:
+            # Если Брат красный
+            if bro.color == RED:
+                bro.color = BLACK
+                nodeUpper.color = RED
+                rootNode = right_rotate(rootNode, nodeUpper) # edited
+            else:
+                # Если брат черный левый ребенок =  черный черный = красный
+                if bro.color == BLACK and \
+                        (bro.right is not None and bro.right.color == RED) and \
+                        (bro.left is None or bro.left.color == BLACK):
+                    bro.color = RED
+                    bro.right = BLACK
+                    rootNode = left_rotate(rootNode, bro)
+                nodeUpper.left.left.color = BLACK
+                nodeUpper.left.color = nodeUpper.color
+                nodeUpper.color = BLACK
+                rootNode = right_rotate(rootNode, nodeUpper)
+        return rootNode
 
 def rbtree_delete(rootNode: RBNode, z: RBNode) -> Node:
     lrFlag = 0
@@ -152,11 +192,22 @@ if __name__ == '__main__':
     tree_insert(root, Node(10))
     root = left_rotate(root, root)
     root = right_rotate(root, root)
+    ...
+    ...
 
     rbroot = RBNode(8, BLACK)
     rbroot = rbtree_insert(rbroot, RBNode(4, RED))
-    rbroot = rbtree_insert(rbroot, RBNode(5, RED))
-    # rbroot = rbtree_insert(rbroot, RBNode(6, RED))
-    # rbroot = rbtree_insert(rbroot, RBNode(7, RED))
-    # rbroot = rbtree_insert(rbroot, RBNode(5, RED))
-    # rbroot = rbtree_insert(rbroot, RBNode(5, RED))
+    rbroot = rbtree_insert(rbroot, RBNode(1, RED))
+    rbroot = rbtree_insert(rbroot, RBNode(2, RED))
+    rbroot = rbtree_insert(rbroot, RBNode(3, RED))
+    rbroot = rbtree_insert(rbroot, RBNode(12, RED))
+    rbroot = rbtree_insert(rbroot, RBNode(7, RED))
+    rbroot = rbtree_insert(rbroot, RBNode(11, RED))
+    rbroot = rbtree_insert(rbroot, RBNode(15, RED))
+    rbroot.other_name()
+    print('////////')
+    rbroot = rbtree_delete(rbroot, rbroot)
+    rbroot.other_name()
+
+    #rbroot = rbtree_delete(rbroot, z)
+    #rbroot.other_name()
