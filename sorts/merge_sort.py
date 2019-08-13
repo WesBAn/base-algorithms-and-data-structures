@@ -1,4 +1,4 @@
-from heap_sort import *
+from sorts.heap_sort import *
 arr = create_arr(length=20)
 arr[0:10] = sorted(arr[0:10])
 arr[10:len(arr)] = sorted(arr[10:len(arr)])

@@ -1,5 +1,5 @@
 import random
-from heap_sort import *
+from sorts.heap_sort import *
 def partition(arr, p, r):
     x = arr[random.randint(p, r+1)]
     i = p - 1

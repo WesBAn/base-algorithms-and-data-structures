@@ -1,4 +1,4 @@
-from trees import *
+from trees.trees import *
 RED = 1
 BLACK = 0
 

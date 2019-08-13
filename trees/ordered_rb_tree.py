@@ -1,4 +1,4 @@
-from black_red_tree import *
+from trees.black_red_tree import *
 """
 Not realized at all!
 """

@@ -8,7 +8,7 @@ def insertion_sort(arr):
             i = i - 1
         arr[i+1] = key
 
-from heap_sort import create_arr
+from sorts.heap_sort import create_arr
 
 arr = create_arr()
 print(arr)

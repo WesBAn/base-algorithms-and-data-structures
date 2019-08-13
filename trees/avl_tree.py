@@ -1,5 +1,4 @@
-from trees import *
-from black_red_tree import left_rotate, right_rotate
+from trees.black_red_tree import left_rotate, right_rotate
 
 class AVLNode(Node):
     def __init__(self, key, height=1, left=None, right=None, parent=None):
