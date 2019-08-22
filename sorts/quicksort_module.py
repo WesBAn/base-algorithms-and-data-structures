@@ -1,7 +1,9 @@
 import random
 from sorts.heap_sort import *
+
+
 def partition(arr, p, r):
-    x = arr[random.randint(p, r+1)]
+    x = arr[random.randint(p, r)]
     i = p - 1
     j = r + 1
     while True:
@@ -23,7 +25,9 @@ def quick_sort(arr, p, r):
         quick_sort(arr, p, q)
         quick_sort(arr, q + 1, r)
 
-arr = create_arr(length=24)
-print(arr)
-quick_sort(arr, 0, len(arr)-1)
-print(arr)
+
+if __name__ == '__main__':
+    arr = create_arr(length=24)
+    print(arr)
+    quick_sort(arr, 0, len(arr)-1)
+    print(arr)
